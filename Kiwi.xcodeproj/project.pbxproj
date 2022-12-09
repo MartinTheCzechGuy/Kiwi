@@ -8,17 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		5B96A5A929435EAD00691BA0 /* KiwiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B96A5A829435EAD00691BA0 /* KiwiApp.swift */; };
-		5B96A5AB29435EAD00691BA0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B96A5AA29435EAD00691BA0 /* ContentView.swift */; };
 		5B96A5AD29435EAF00691BA0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B96A5AC29435EAF00691BA0 /* Assets.xcassets */; };
 		5B96A5B029435EAF00691BA0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B96A5AF29435EAF00691BA0 /* Preview Assets.xcassets */; };
+		5B96A5BC2943603F00691BA0 /* Root in Frameworks */ = {isa = PBXBuildFile; productRef = 5B96A5BB2943603F00691BA0 /* Root */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5B96A5A529435EAD00691BA0 /* Kiwi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kiwi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B96A5A829435EAD00691BA0 /* KiwiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KiwiApp.swift; sourceTree = "<group>"; };
-		5B96A5AA29435EAD00691BA0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5B96A5AC29435EAF00691BA0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B96A5AF29435EAF00691BA0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		5B96A5B629435ED200691BA0 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
+		5B96A5B729435EE700691BA0 /* Feature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feature; sourceTree = "<group>"; };
+		5B96A5B829435EF400691BA0 /* SDK */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SDK; sourceTree = "<group>"; };
+		5B96A5B929435F0200691BA0 /* Infrastructure */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Infrastructure; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B96A5BC2943603F00691BA0 /* Root in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,6 +41,7 @@
 			children = (
 				5B96A5A729435EAD00691BA0 /* Kiwi */,
 				5B96A5A629435EAD00691BA0 /* Products */,
+				5B96A5BA2943603F00691BA0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -51,8 +56,11 @@
 		5B96A5A729435EAD00691BA0 /* Kiwi */ = {
 			isa = PBXGroup;
 			children = (
+				5B96A5B629435ED200691BA0 /* Core */,
+				5B96A5B729435EE700691BA0 /* Feature */,
+				5B96A5B829435EF400691BA0 /* SDK */,
+				5B96A5B929435F0200691BA0 /* Infrastructure */,
 				5B96A5A829435EAD00691BA0 /* KiwiApp.swift */,
-				5B96A5AA29435EAD00691BA0 /* ContentView.swift */,
 				5B96A5AC29435EAF00691BA0 /* Assets.xcassets */,
 				5B96A5AE29435EAF00691BA0 /* Preview Content */,
 			);
@@ -65,6 +73,13 @@
 				5B96A5AF29435EAF00691BA0 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		5B96A5BA2943603F00691BA0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +98,9 @@
 			dependencies = (
 			);
 			name = Kiwi;
+			packageProductDependencies = (
+				5B96A5BB2943603F00691BA0 /* Root */,
+			);
 			productName = Kiwi;
 			productReference = 5B96A5A529435EAD00691BA0 /* Kiwi.app */;
 			productType = "com.apple.product-type.application";
@@ -137,7 +155,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B96A5AB29435EAD00691BA0 /* ContentView.swift in Sources */,
 				5B96A5A929435EAD00691BA0 /* KiwiApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -273,8 +290,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -282,9 +299,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = kolomaznik.martin.Kiwi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -302,8 +322,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -311,9 +331,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = kolomaznik.martin.Kiwi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -339,6 +362,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5B96A5BB2943603F00691BA0 /* Root */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Root;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5B96A59D29435EAD00691BA0 /* Project object */;
 }

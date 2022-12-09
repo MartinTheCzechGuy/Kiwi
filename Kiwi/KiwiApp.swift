@@ -1,17 +1,11 @@
-//
-//  KiwiApp.swift
-//  Kiwi
-//
-//  Created by Martin on 09.12.2022.
-//
-
+import Root
 import SwiftUI
 
 @main
 struct KiwiApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+  var body: some Scene {
+    WindowGroup {
+      RootView()
     }
+  }
 }
