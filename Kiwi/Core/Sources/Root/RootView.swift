@@ -1,3 +1,4 @@
+import FlightOffers
 import SwiftUI
 
 public struct RootView: View {
@@ -5,6 +6,6 @@ public struct RootView: View {
   public init() {}
   
   public var body: some View {
-    Text("hello root")
+    FlightOffersView(viewModel: .init(flightsClient: .live()))
   }
 }

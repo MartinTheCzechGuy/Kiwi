@@ -20,7 +20,9 @@ let package = Package(
   targets: [
     .target(
       name: "Root",
-      dependencies: []
+      dependencies: [
+        .product(name: "FlightOffers", package: "Feature"),
+      ]
     ),
     .testTarget(
       name: "RootTests",
