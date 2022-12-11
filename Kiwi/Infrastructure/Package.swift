@@ -14,6 +14,10 @@ let package = Package(
       targets: ["CoreToolkit"]
     ),
     .library(
+      name: "InstanceProvider",
+      targets: ["InstanceProvider"]
+    ),
+    .library(
       name: "Loading",
       targets: ["Loading"]
     ),
@@ -27,6 +31,8 @@ let package = Package(
     ),
   ],
   dependencies: [
+    .package(url: "https://github.com/Swinject/Swinject.git", .upToNextMajor(from: "2.8.0")),
+    .package(url: "https://github.com/Swinject/SwinjectAutoregistration.git", .upToNextMajor(from: "2.7.0")),
   ],
   targets: [
     .target(
@@ -37,6 +43,13 @@ let package = Package(
       name: "CoreToolkitTests",
       dependencies: [
         "CoreToolkit"
+      ]
+    ),
+    .target(
+      name: "InstanceProvider",
+      dependencies: [
+        "Swinject",
+        "SwinjectAutoregistration"
       ]
     ),
     .target(

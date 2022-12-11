@@ -21,6 +21,7 @@ let package = Package(
     .target(
       name: "Flights",
       dependencies: [
+        .product(name: "InstanceProvider", package: "Infrastructure"),
         .product(name: "Networking", package: "Infrastructure"),
       ]
     ),

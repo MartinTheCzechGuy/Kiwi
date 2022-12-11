@@ -15,13 +15,19 @@ let package = Package(
     ),
   ],
   dependencies: [
-    .package(path: "../Feature")
+    .package(path: "../Feature"),
+    .package(path: "../SDK"),
+    .package(path: "../Infrastructure"),
   ],
   targets: [
     .target(
       name: "Root",
       dependencies: [
         .product(name: "FlightOffers", package: "Feature"),
+        .product(name: "Flights", package: "SDK"),
+        .product(name: "InstanceProvider", package: "Infrastructure"),
+        .product(name: "Networking", package: "Infrastructure"),
+
       ]
     ),
     .testTarget(

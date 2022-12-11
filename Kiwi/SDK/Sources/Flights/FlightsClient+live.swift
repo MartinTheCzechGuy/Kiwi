@@ -3,29 +3,16 @@ import Foundation
 import Networking
 
 public extension FlightsClient {
-  static func live() -> FlightsClient {
+  static func live(
+    networkClient: NetworkClientType
+  ) -> FlightsClient {
     FlightsClient(
       search: { parameters in
         currentFlightsRequest(parameters: parameters)
           .publisher
           .flatMap {
-            URLSession.shared.dataTaskPublisher(for: $0)
-              .tryMap { data, response in
-                guard
-                  let statusCode = (response as? HTTPURLResponse)?.statusCode,
-                  case 200...299 = statusCode
-                else {
-                  throw FlightsError.invalidStatusCode(response)
-                }
-                
-                return data
-              }
+            networkClient.request(URLRequest(url: $0))
               .mapError(FlightsError.networkingError)
-          }
-          .flatMap {
-            Just($0)
-              .decode(type: Flights.self, decoder: JSONDecoder())
-              .mapError(FlightsError.decodingError)
           }
           .eraseToAnyPublisher()
       },

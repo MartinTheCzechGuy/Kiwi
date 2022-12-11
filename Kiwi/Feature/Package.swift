@@ -24,6 +24,7 @@ let package = Package(
       dependencies: [
         .product(name: "CoreToolkit", package: "Infrastructure"),
         .product(name: "Flights", package: "SDK"),
+        .product(name: "InstanceProvider", package: "Infrastructure"),
         .product(name: "Loading", package: "Infrastructure"),
         .product(name: "UIToolkit", package: "Infrastructure")
       ]

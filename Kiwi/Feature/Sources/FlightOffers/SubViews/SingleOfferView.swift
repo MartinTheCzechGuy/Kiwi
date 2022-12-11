@@ -2,7 +2,7 @@ import CoreToolkit
 import UIToolkit
 import SwiftUI
 
-struct FlightOfferView: View {
+struct SingleOfferView: View {
   
   private let offer: FlightOffer
   private let onButtonTap: () -> Void
@@ -73,9 +73,9 @@ struct FlightOfferView: View {
   }
 }
 
-struct FlightOfferView_Previews: PreviewProvider {
+struct SingleOfferView_Previews: PreviewProvider {
   static var previews: some View {
-    FlightOfferView(
+    SingleOfferView(
       offer:
         FlightOffer(
           imageURL: URL(string: "https://images.kiwi.com/photos/600x330/prague_cz.jpg"),

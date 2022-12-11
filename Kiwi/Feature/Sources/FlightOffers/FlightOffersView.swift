@@ -25,7 +25,7 @@ public struct FlightOffersView: View {
             items: offers,
             index: $carouselIndex
           ) { offer in
-            FlightOfferView(
+            SingleOfferView(
               offer: offer,
               onButtonTap: {
                 if let url = viewModel.bookingWebsite {
