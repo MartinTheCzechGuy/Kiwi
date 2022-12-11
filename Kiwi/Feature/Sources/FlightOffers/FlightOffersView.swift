@@ -1,3 +1,4 @@
+import Loading
 import UIToolkit
 import SwiftUI
 
@@ -11,27 +12,35 @@ public struct FlightOffersView: View {
   }
   
   public var body: some View {
-    VStack {
-      Text("Flight offers")
-        .fontWeight(.black)
-      
-      CarouselView(
-        items: viewModel.offers,
-        index: $carouselIndex
-      ) { offer in
-        FlightOfferView(
-          offer: offer,
-          onButtonTap: {
-            if let url = URL(string: "https://www.kiwi.com/en/") {
-              UIApplication.shared.open(url)
-            }
+    LoadableView(
+      loadingState: viewModel.offers,
+      loadingTitle: "Loading offers...",
+      onErrorOkTap: { viewModel.fetchOffers() },
+      content: { offers in
+        VStack {
+          Text("Flight offers")
+            .fontWeight(.black)
+          
+          CarouselView(
+            items: offers,
+            index: $carouselIndex
+          ) { offer in
+            FlightOfferView(
+              offer: offer,
+              onButtonTap: {
+                if let url = viewModel.bookingWebsite {
+                  UIApplication.shared.open(url)
+                }
+              }
+            )
           }
-        )
+        }
+        .padding()
+        
       }
-      .onAppear {
-        viewModel.fetchOffers()
-      }
-      .padding()
+    )
+    .onAppear {
+      viewModel.fetchOffers()
     }
   }
   

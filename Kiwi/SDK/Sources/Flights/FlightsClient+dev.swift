@@ -1,27 +1,36 @@
 import Combine
+import Foundation
 
 public extension FlightsClient {
   static func dev() -> FlightsClient {
     FlightsClient(
       search: { _ in
         Just(
-          Flight(
+          Flights(
             currency: "EUR",
-            flightData: [
+            numOfAdults: 2,
+            data: [
               FlightData(
                 cityFrom: "Prague",
                 cityTo: "Barcelona",
-                countryFrom: .init(code: "CZ", name: "Czechia"),
-                countryTo: .init(code: "ES", name: "Espania"),
-                dTimeUTC: 1672739100,
-                aTimeUTC: 1672817700,
+                countryFromCode: "CZ",
+                countryToCode: "ES",
+                departure: Date(timeIntervalSince1970: 1669895252),
+                arrival: Date(timeIntervalSince1970: 1670759252),
                 price: 200,
-                route: [
+                nightsInDestination: 5,
+                routes: [
                   Route(
                     cityFrom: "Prague",
                     cityTo: "Barcelona",
-                    dTimeUTC: 1672739100,
-                    aTimeUTC: 1672817700
+                    departure: Date(timeIntervalSince1970: 1669895252),
+                    arrival: Date(timeIntervalSince1970: 1669906052)
+                  ),
+                  Route(
+                    cityFrom: "Barcelona",
+                    cityTo: "Prague",
+                    departure: Date(timeIntervalSince1970: 1670748452),
+                    arrival: Date(timeIntervalSince1970: 1670759252)
                   )
                 ]
               )
@@ -30,6 +39,9 @@ public extension FlightsClient {
         )
         .setFailureType(to: FlightsError.self)
         .eraseToAnyPublisher()
+      },
+      imageURL: { _ in
+        URL(string: "https://images.kiwi.com/photos/600x330/prague_cz.jpg")!
       }
     )
   }

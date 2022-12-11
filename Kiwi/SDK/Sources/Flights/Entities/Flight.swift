@@ -1,113 +1,138 @@
-public struct Flight: Decodable {
-  let currency: String
-  let flightData: [FlightData]
-  
-  public init(
-    currency: String,
-    flightData: [FlightData]
-  ) {
-    self.currency = currency
-    self.flightData = flightData
+import Foundation
+
+public struct Flights: Decodable {
+  public let currency: String
+  public let numOfAdults: Int
+  public let data: [FlightData]
+
+  enum RootKeys: String, CodingKey {
+    case currency
+    case data
+    case searchParams = "search_params"
   }
   
-  enum CodingKeys: String, CodingKey {
-    case currency
-    case flightData = "data"
+  enum SearchParamsKeys: String, CodingKey {
+    case seats
+  }
+  
+  enum SeatsKeys: String, CodingKey {
+    case adults
+  }
+  
+  public init(currency: String, numOfAdults: Int, data: [FlightData]) {
+    self.currency = currency
+    self.numOfAdults = numOfAdults
+    self.data = data
+  }
+  
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: RootKeys.self)
+    self.currency = try container.decode(String.self, forKey: .currency)
+    self.data = try container.decode([FlightData].self, forKey: .data)
+        
+    let searchParamsContainer = try container.nestedContainer(keyedBy: SearchParamsKeys.self, forKey: .searchParams)
+    let seatsContainer = try searchParamsContainer.nestedContainer(keyedBy: SeatsKeys.self, forKey: .seats)
+    
+    self.numOfAdults = try seatsContainer.decode(Int.self, forKey: .adults)
   }
 }
 
 public struct FlightData: Decodable {
-  let cityFrom: String
-  let cityTo: String
-  let countryFrom: FlightDataCountry
-  let countryTo: FlightDataCountry
-  let dTimeUTC: Int
-  let aTimeUTC: Int
-  let price: Int
-  let route: [Route]
+  public let cityFrom: String
+  public let cityTo: String
+  public let countryFromCode: String
+  public let countryToCode: String
+  public let departure: Date
+  public let arrival: Date
+  public let price: Double
+  public let nightsInDestination: Int
+  public let routes: [Route]
   
-  public init(cityFrom: String, cityTo: String, countryFrom: FlightDataCountry, countryTo: FlightDataCountry, dTimeUTC: Int, aTimeUTC: Int, price: Int, route: [Route]) {
+  public init(
+    cityFrom: String,
+    cityTo: String,
+    countryFromCode: String,
+    countryToCode: String,
+    departure: Date,
+    arrival: Date,
+    price: Double,
+    nightsInDestination: Int,
+    routes: [Route]
+  ) {
     self.cityFrom = cityFrom
     self.cityTo = cityTo
-    self.countryFrom = countryFrom
-    self.countryTo = countryTo
-    self.dTimeUTC = dTimeUTC
-    self.aTimeUTC = aTimeUTC
+    self.countryFromCode = countryFromCode
+    self.countryToCode = countryToCode
+    self.departure = departure
+    self.arrival = arrival
     self.price = price
-    self.route = route
+    self.nightsInDestination = nightsInDestination
+    self.routes = routes
   }
-}
-
-public struct FlightDataCountry: Decodable {
-  let code: String
-  let name: String
   
-  public init(code: String, name: String) {
-    self.code = code
-    self.name = name
+  enum RootKeys: String, CodingKey {
+    case cityFrom
+    case cityTo
+    case countryFrom
+    case countryTo
+    case dTimeUTC
+    case aTimeUTC
+    case price
+    case nightsInDestination = "nightsInDest"
+    case routes = "route"
+  }
+  
+  enum CountryKeys: String, CodingKey {
+    case code
+  }
+  
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: RootKeys.self)
+    self.cityFrom = try container.decode(String.self, forKey: .cityFrom)
+    self.cityTo = try container.decode(String.self, forKey: .cityTo)
+    let departureTimeInterval = try container.decode(Double.self, forKey: .dTimeUTC)
+    let arrivalTimeInterval = try container.decode(Double.self, forKey: .aTimeUTC)
+    self.departure = Date(timeIntervalSince1970: departureTimeInterval)
+    self.arrival = Date(timeIntervalSince1970: arrivalTimeInterval)
+    self.price = try container.decode(Double.self, forKey: .price)
+    self.nightsInDestination = try container.decode(Int.self, forKey: .nightsInDestination)
+    self.routes = try container.decode([Route].self, forKey: .routes)
+    
+    let countryFromContainer = try container.nestedContainer(keyedBy: CountryKeys.self, forKey: .countryFrom)
+    let countryToContainer = try container.nestedContainer(keyedBy: CountryKeys.self, forKey: .countryTo)
+    self.countryFromCode = try countryFromContainer.decode(String.self, forKey: .code)
+    self.countryToCode = try countryToContainer.decode(String.self, forKey: .code)
   }
 }
 
 public struct Route: Decodable {
-  let cityFrom: String
-  let cityTo: String
-  let dTimeUTC: Int
-  let aTimeUTC: Int
-  
-  public init(cityFrom: String, cityTo: String, dTimeUTC: Int, aTimeUTC: Int) {
-    self.cityFrom = cityFrom
-    self.cityTo = cityTo
-    self.dTimeUTC = dTimeUTC
-    self.aTimeUTC = aTimeUTC
-  }
-}
-
-
-struct FlightsSearch: Encodable {
-  let partner: String
- //Example: partner_market=cz, Use ISO 3166-1 alpha-2
-  let partnerMarket: String
-  let flyFrom: String
-  let destination: String
-  // YYYY-MM-DDThh:mm
-  let departure: String
-  //  depart_before
-  let arrival: String
-  // arrive_before
-  // number of nights in destination
-  let nights: Int
-  let cabinType: CabinType
-  let children: Int
-  let adults: Int
-  let priceFrom: Int
-  let priceTo: Int
-  let currency: String
-  // language of city names in the answer
-  let locale: String
-  let limit: Int
+  public let cityFrom: String
+  public let cityTo: String
+  public let departure: Date
+  public let arrival: Date
   
   enum CodingKeys: String, CodingKey {
-    case partner
-    case partnerMarket
-    case flyFrom = "fly_from"
-    case destination = "fly_to"
-    case departure = "depart_after"
-    case arrival = "arrive_after"
-    case nights = "nights_in_dst_to"
-    case cabinType = "selected_cabins"
-    case children = "children"
-    case adults = "adult_hold_bag"
-    case priceFrom = "price_from"
-    case priceTo = "price_to"
-    case currency = "curr"
-    case locale = "locale"
-    case limit = "limit"
+    case cityFrom
+    case cityTo
+    case departure = "dTimeUTC"
+    case arrival = "aTimeUTC"
   }
   
-  enum CabinType: String, Encodable {
-    case economy = "M"
-    case economyPremium = "W"
-    case business = "C"
-    case firstClass = "F"
+  public init(cityFrom: String, cityTo: String, departure: Date, arrival: Date) {
+    self.cityFrom = cityFrom
+    self.cityTo = cityTo
+    self.departure = departure
+    self.arrival = arrival
+  }
+  
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    self.cityFrom = try container.decode(String.self, forKey: .cityFrom)
+    self.cityTo = try container.decode(String.self, forKey: .cityTo)
+    
+    let departureTimeInterval = try container.decode(Double.self, forKey: .departure)
+    let arrivalTimeInterval = try container.decode(Double.self, forKey: .arrival)
+    self.departure = Date(timeIntervalSince1970: departureTimeInterval)
+    self.arrival = Date(timeIntervalSince1970: arrivalTimeInterval)
   }
 }

@@ -22,7 +22,9 @@ let package = Package(
     .target(
       name: "FlightOffers",
       dependencies: [
+        .product(name: "CoreToolkit", package: "Infrastructure"),
         .product(name: "Flights", package: "SDK"),
+        .product(name: "Loading", package: "Infrastructure"),
         .product(name: "UIToolkit", package: "Infrastructure")
       ]
     ),

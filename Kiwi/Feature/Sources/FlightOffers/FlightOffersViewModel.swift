@@ -1,81 +1,110 @@
 import Combine
 import Flights
 import Foundation
+import Loading
 
 public class FlightOffersViewModel: ObservableObject {
   
-  @Published var offers: [FlightOffer] = []
+  @Published var offers: LoadingState<[FlightOffer], FlightsError> = .loading
+  
+  let bookingWebsite: URL?
   
   private let flightsClient: FlightsClient
   private var bag = Set<AnyCancellable>()
+  
+  // This would be mapped into a different object, that is @Published as well and somehow co-created by the user
+  private let searchParameters: SearchParameters
   
   public init(
     flightsClient: FlightsClient
   ) {
     self.flightsClient = flightsClient
+    self.bookingWebsite = URL(string: "https://www.kiwi.com/en/")
+    
+    
+    // TODO: move this, search param create here or? Would not be here at all in real app
+    let today = Date.now
+    var dateComponents = DateComponents()
+    dateComponents.day = 5
+    let returnDate = Calendar.current.date(byAdding: dateComponents, to: today)!
+    dateComponents.day = 7
+    let returnDate2 = Calendar.current.date(byAdding: dateComponents, to: today)!
+    
+    let formatter = DateFormatter()
+    formatter.dateFormat = "YYYY-MM-dd'T'HH:mm"
+    
+    self.searchParameters = SearchParameters(
+      partner: "skypicker",
+      partnerMarket: "cs",
+      flyFrom: "prague_cz",
+      departure: formatter.string(from: Date.now),
+      cabinType: .economy,
+      children: 0,
+      adults: 2,
+      priceTo: 2000,
+      currency: "EUR",
+      locale: "en",
+      limit: 5,
+      maxStopOvers: 0,
+      returnDepartureBefore: formatter.string(from: returnDate2),
+      returnDepartureAfter: formatter.string(from: returnDate),
+      returnFromDifferentAirport: false
+    )
   }
   
   func fetchOffers() {
-    offers = [
-      FlightOffer(
-        imageURL: URL(string: "https://images.kiwi.com/photos/600x330/prague_cz.jpg")!,
-        destination: "Prague",
-        departureFrom: "Brno",
-        departureTime: "2023-03-07 11:55 AM",
-        arrivalTime: "2023-03-07 2:45 PM",
-        price: 200,
-        adults: 2
-      ),
-      FlightOffer(
-        imageURL: URL(string: "https://images.kiwi.com/photos/600x330/barcelona_es.jpg")!,
-        destination: "Barcelona",
-        departureFrom: "Prague",
-        departureTime: "2023-03-07 11:55 AM",
-        arrivalTime: "2023-03-07 2:45 PM",
-        price: 350,
-        adults: 2
-      ),
-      FlightOffer(
-        imageURL: URL(string: "https://images.kiwi.com/photos/600x330/madrid_es.jpg")!,
-        destination: "Madrid",
-        departureFrom: "Prague",
-        departureTime: "2023-03-07 11:55 AM",
-        arrivalTime: "2023-03-07 2:45 PM",
-        price: 350,
-        adults: 2
+    offers = .loading
+    
+    flightsClient.search(searchParameters)
+      .map { [weak self] (flights: Flights) -> [FlightOffer] in
+        flights.data.map { (flightData: FlightData) -> FlightOffer in
+          let journeyToDestination = flightData.routes
+            .first(where: { route in route.cityFrom == flightData.cityFrom })
+            .map { routeToDestionation in
+              Route(
+                from: routeToDestionation.cityFrom,
+                to: routeToDestionation.cityTo,
+                departure: routeToDestionation.departure,
+                arrival: routeToDestionation.arrival
+              )
+            }
+          
+          let journeyFromDestination = flightData.routes
+            .first(where: { route in route.cityFrom == flightData.cityTo })
+            .map { routeHome in
+              Route(
+                from: routeHome.cityFrom,
+                to: routeHome.cityTo,
+                departure: routeHome.departure,
+                arrival: routeHome.arrival
+              )
+            }
+          
+          return FlightOffer(
+            imageURL: self?.flightsClient.imageURL(flightData),
+            destination: flightData.cityTo,
+            departureFrom: flightData.cityFrom,
+            departureTime: flightData.departure.formatted(.dateTime),
+            arrivalTime: flightData.arrival.formatted(.dateTime),
+            price: flightData.price.formatted(.currency(code: flights.currency)),
+            adults: flights.numOfAdults,
+            nightsInDestination: flightData.nightsInDestination,
+            journeyToDestionation: journeyToDestination!,
+            journeyFromDestination: journeyFromDestination!
+          )
+        }
+      }
+      .loadingPublisher()
+      .print("😇")
+      .receive(on: DispatchQueue.main)
+      .sink(
+        receiveCompletion: { completion in
+          return
+        },
+        receiveValue: { [weak self] offers in
+          self?.offers = offers
+        }
       )
-    ]
-    
-    
-//    flightsClient.search("tada")
-//      .compactMap { $0 }
-//      .print("😂 1")
-//      .replaceError(
-//        with: Flight(
-//          currency: "EUR",
-//          flightData: [
-//            FlightData(
-//              cityFrom: "Prague",
-//              cityTo: "Barcelona",
-//              countryFrom: .init(code: "CZ", name: "Czechia"),
-//              countryTo: .init(code: "ES", name: "Espania"),
-//              dTimeUTC: 1672739100,
-//              aTimeUTC: 1672817700,
-//              price: 200,
-//              route: [
-//                Route(
-//                  cityFrom: "Prague",
-//                  cityTo: "Barcelona",
-//                  dTimeUTC: 1672739100,
-//                  aTimeUTC: 1672817700
-//                )
-//              ]
-//            )
-//          ]
-//        )
-//      )
-//      .receive(on: DispatchQueue.main)
-//      .assign(to: \.flights, on: self)
-//      .store(in: &bag)
+      .store(in: &bag)
   }
 }

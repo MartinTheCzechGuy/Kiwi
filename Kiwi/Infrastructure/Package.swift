@@ -10,6 +10,18 @@ let package = Package(
   ],
   products: [
     .library(
+      name: "CoreToolkit",
+      targets: ["CoreToolkit"]
+    ),
+    .library(
+      name: "Loading",
+      targets: ["Loading"]
+    ),
+    .library(
+      name: "Networking",
+      targets: ["Networking"]
+    ),
+    .library(
       name: "UIToolkit",
       targets: ["UIToolkit"]
     ),
@@ -18,8 +30,34 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "UIToolkit",
+      name: "CoreToolkit",
       dependencies: []
+    ),
+    .testTarget(
+      name: "CoreToolkitTests",
+      dependencies: [
+        "CoreToolkit"
+      ]
+    ),
+    .target(
+      name: "Loading",
+      dependencies: []
+    ),
+    .target(
+      name: "Networking",
+      dependencies: []
+    ),
+    .testTarget(
+      name: "NetworkingTests",
+      dependencies: [
+        "Networking"
+      ]
+    ),
+    .target(
+      name: "UIToolkit",
+      dependencies: [
+        "Loading"
+      ]
     ),
   ]
 )

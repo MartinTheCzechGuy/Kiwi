@@ -1,49 +1,52 @@
 import Combine
 import Foundation
+import Networking
 
 public extension FlightsClient {
   static func live() -> FlightsClient {
     FlightsClient(
-      search: { _ in
-        // YYYY-MM-DDThh:mm
-        let searchParams = FlightsSearch(
-          partner: "skypicker",
-          partnerMarket: "cs",
-          flyFrom: "Prague",
-          destination: "Barcelona",
-          departure: "2022-12-10T10:10",
-          arrival: "2022-12-14T10:10",
-          nights: 3,
-          cabinType: .economy,
-          children: 0,
-          adults: 2,
-          priceFrom: 50,
-          priceTo: 500,
-          currency: "EUR",
-          locale: "cs",
-          limit: 20
-        )
-        
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = "api.skypicker.com"
-        components.path = "/flights"
-        
-        components.queryItems = [
-          URLQueryItem(name: "partner", value: "skypicker"),
-          URLQueryItem(name: "fly_from", value: "prague_cz"),
-          URLQueryItem(name: "fly_to", value: "barcelona_es"),
-          
-        ]
-        
-        return URLSession.shared.dataTaskPublisher(for: components.url!)
-          .map(\.data)
-          .mapError { _ in FlightsError.urlRequestError }
-          .decode(type: Flight.self, decoder: JSONDecoder())
-          .mapError { _ in FlightsError.urlRequestError }
-          .print("😂 po decode")
+      search: { parameters in
+        currentFlightsRequest(parameters: parameters)
+          .publisher
+          .flatMap {
+            URLSession.shared.dataTaskPublisher(for: $0)
+              .tryMap { data, response in
+                guard
+                  let statusCode = (response as? HTTPURLResponse)?.statusCode,
+                  case 200...299 = statusCode
+                else {
+                  throw FlightsError.invalidStatusCode(response)
+                }
+                
+                return data
+              }
+              .mapError(FlightsError.networkingError)
+          }
+          .flatMap {
+            Just($0)
+              .decode(type: Flights.self, decoder: JSONDecoder())
+              .mapError(FlightsError.decodingError)
+          }
           .eraseToAnyPublisher()
+      },
+      imageURL: { flightData in
+        URL(string: "https://images.kiwi.com/photos/600x330/\(flightData.cityTo.lowercased())_\(flightData.countryToCode.lowercased()).jpg")
       }
     )
+  }
+  
+  static func currentFlightsRequest(parameters searchParams: SearchParameters) -> Result<URL, FlightsError> {
+    var components = URLComponents()
+    components.scheme = "https"
+    components.host = "api.skypicker.com"
+    components.path = "/flights"
+    
+    components.queryItems = searchParams.encodeToQueryParameters()
+    
+    guard let url = components.url else {
+      return .failure(.urlRequestError)
+    }
+    
+    return .success(url)
   }
 }
