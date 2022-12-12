@@ -1,0 +1,41 @@
+{
+  "configurations" : [
+    {
+      "id" : "977C53DC-C9A5-4048-A5BC-B74499A337C5",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Kiwi\/Feature",
+        "identifier" : "FlightOffersTests",
+        "name" : "FlightOffersTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Kiwi\/Infrastructure",
+        "identifier" : "CoreToolkitTests",
+        "name" : "CoreToolkitTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Kiwi\/SDK",
+        "identifier" : "FlightsSDKTests",
+        "name" : "FlightsSDKTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -10,8 +10,8 @@ let package = Package(
   ],
   products: [
     .library(
-      name: "Flights",
-      targets: ["Flights"]
+      name: "FlightsSDK",
+      targets: ["FlightsSDK"]
     ),
   ],
   dependencies: [
@@ -19,15 +19,15 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "Flights",
+      name: "FlightsSDK",
       dependencies: [
         .product(name: "InstanceProvider", package: "Infrastructure"),
         .product(name: "Networking", package: "Infrastructure"),
       ]
     ),
     .testTarget(
-      name: "FlightsTests",
-      dependencies: ["Flights"]
+      name: "FlightsSDKTests",
+      dependencies: ["FlightsSDK"]
     ),
   ]
 )

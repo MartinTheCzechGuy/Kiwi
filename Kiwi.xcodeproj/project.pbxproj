@@ -22,6 +22,7 @@
 		5B96A5B729435EE700691BA0 /* Feature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feature; sourceTree = "<group>"; };
 		5B96A5B829435EF400691BA0 /* SDK */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SDK; sourceTree = "<group>"; };
 		5B96A5B929435F0200691BA0 /* Infrastructure */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Infrastructure; sourceTree = "<group>"; };
+		5BBE29B429479B9400BBFAE2 /* Kiwi.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Kiwi.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +64,7 @@
 				5B96A5A829435EAD00691BA0 /* KiwiApp.swift */,
 				5B96A5AC29435EAF00691BA0 /* Assets.xcassets */,
 				5B96A5AE29435EAF00691BA0 /* Preview Content */,
+				5BBE29B429479B9400BBFAE2 /* Kiwi.xctestplan */,
 			);
 			path = Kiwi;
 			sourceTree = "<group>";

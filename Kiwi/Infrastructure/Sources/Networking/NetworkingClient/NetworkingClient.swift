@@ -1,7 +1,7 @@
 import Combine
 import Foundation
 
-struct NetworkClient: NetworkClientType {
+struct NetworkingClient: NetworkingClientType {
   func request(_ urlRequest: URLRequest) -> AnyPublisher<Data, NetworkError> {
     URLSession.shared.dataTaskPublisher(for: urlRequest)
       .tryMap { data, response in

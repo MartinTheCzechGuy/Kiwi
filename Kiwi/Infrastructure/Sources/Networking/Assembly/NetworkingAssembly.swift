@@ -7,6 +7,6 @@ public class NetworkingAssembly: Assembly {
   public init() { }
   
   public func assemble(container: Container) {
-    container.autoregister(NetworkClientType.self, initializer: NetworkClient.init)
+    container.autoregister(NetworkingClientType.self, initializer: NetworkingClient.init)
   }
 }

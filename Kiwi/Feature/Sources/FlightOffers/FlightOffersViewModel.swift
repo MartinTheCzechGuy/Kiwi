@@ -1,5 +1,5 @@
 import Combine
-import Flights
+import FlightsSDK
 import Foundation
 import Loading
 
@@ -52,9 +52,7 @@ public class FlightOffersViewModel: ObservableObject {
     )
   }
   
-  func fetchOffers() {
-    offers = .loading
-    
+  func fetchOffers() {    
     flightsClient.search(searchParameters)
       .map { [weak self] (flights: Flights) -> [FlightOffer] in
         flights.data.map { (flightData: FlightData) -> FlightOffer in
@@ -95,7 +93,6 @@ public class FlightOffersViewModel: ObservableObject {
         }
       }
       .loadingPublisher()
-      .print("😇")
       .receive(on: DispatchQueue.main)
       .sink(
         receiveCompletion: { completion in

@@ -24,15 +24,11 @@ let package = Package(
       name: "Root",
       dependencies: [
         .product(name: "FlightOffers", package: "Feature"),
-        .product(name: "Flights", package: "SDK"),
+        .product(name: "FlightsSDK", package: "SDK"),
         .product(name: "InstanceProvider", package: "Infrastructure"),
         .product(name: "Networking", package: "Infrastructure"),
 
       ]
-    ),
-    .testTarget(
-      name: "RootTests",
-      dependencies: ["Root"]
-    ),
+    )
   ]
 )

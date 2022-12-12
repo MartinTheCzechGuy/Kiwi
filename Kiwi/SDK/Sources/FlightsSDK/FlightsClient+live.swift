@@ -4,14 +4,14 @@ import Networking
 
 public extension FlightsClient {
   static func live(
-    networkClient: NetworkClientType
+    NetworkingClient: NetworkingClientType
   ) -> FlightsClient {
     FlightsClient(
       search: { parameters in
         currentFlightsRequest(parameters: parameters)
           .publisher
           .flatMap {
-            networkClient.request(URLRequest(url: $0))
+            NetworkingClient.request(URLRequest(url: $0))
               .mapError(FlightsError.networkingError)
           }
           .eraseToAnyPublisher()

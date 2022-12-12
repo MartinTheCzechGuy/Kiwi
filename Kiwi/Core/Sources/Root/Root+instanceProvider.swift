@@ -1,5 +1,5 @@
-import Flights
 import FlightOffers
+import FlightsSDK
 import InstanceProvider
 import Networking
 import Swinject

@@ -1,11 +1,11 @@
 import Combine
 import Foundation
 
-public protocol NetworkClientType {
+public protocol NetworkingClientType {
   func request(_ urlRequest: URLRequest) -> AnyPublisher<Data, NetworkError>
 }
 
-public extension NetworkClientType {
+public extension NetworkingClientType {
   func request<T: Decodable>(
     _ urlRequest: URLRequest,
     jsonDecoder: JSONDecoder = JSONDecoder()
