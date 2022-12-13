@@ -17,7 +17,9 @@ extension SearchParameters {
       maxStopOvers: 0,
       returnDepartureBefore: "2022-12-21T20:20",
       returnDepartureAfter: "2022-12-20T20:20",
-      returnFromDifferentAirport: false
+      returnFromDifferentAirport: false,
+      minNights: 3,
+      maxNights: 7
     )
   }
 }

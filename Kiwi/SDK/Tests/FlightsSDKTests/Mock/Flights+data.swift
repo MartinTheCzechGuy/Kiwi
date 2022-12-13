@@ -1,6 +1,6 @@
-import FlightsSDK
+@testable import FlightsSDK
 
-extension Flights {
+extension FlightsEntity {
   static let json = """
 {
     "search_id": "9070b8e3-2a94-813f-273b-dca743af6ebf",

@@ -23,17 +23,9 @@ public struct FlightOffersView: View {
           
           CarouselView(
             items: offers,
-            index: $carouselIndex
-          ) { offer in
-            SingleOfferView(
-              offer: offer,
-              onButtonTap: {
-                if let url = viewModel.bookingWebsite {
-                  UIApplication.shared.open(url)
-                }
-              }
-            )
-          }
+            index: $carouselIndex,
+            pageView: SingleOfferView.init(offer:)
+          )
         }
         .padding()
         

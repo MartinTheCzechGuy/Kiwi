@@ -1,4 +1,5 @@
 import Combine
+import CoreToolkit
 import FlightsSDK
 import Foundation
 import Loading
@@ -7,31 +8,22 @@ public class FlightOffersViewModel: ObservableObject {
   
   @Published var offers: LoadingState<[FlightOffer], FlightsError> = .loading
   
-  let bookingWebsite: URL?
-  
   private let flightsClient: FlightsClient
   private var bag = Set<AnyCancellable>()
   
-  // This would be mapped into a different object, that is @Published as well and somehow co-created by the user
   private let searchParameters: SearchParameters
   
   public init(
     flightsClient: FlightsClient
   ) {
     self.flightsClient = flightsClient
-    self.bookingWebsite = URL(string: "https://www.kiwi.com/en/")
     
-    
-    // TODO: move this, search param create here or? Would not be here at all in real app
+    // This would not be here at all in real app, instead there would be some @Published properties and the SearchParameter would be atleast co created by the user based on his/her input
     let today = Date.now
-    var dateComponents = DateComponents()
-    dateComponents.day = 5
-    let returnDate = Calendar.current.date(byAdding: dateComponents, to: today)!
-    dateComponents.day = 7
-    let returnDate2 = Calendar.current.date(byAdding: dateComponents, to: today)!
+    let earlierReturnDate = today.addDays(numOfDays: 20) ?? today + (60*60*24*20)
+    let laterReturnDate = today.addDays(numOfDays: 30) ?? today + (60*60*24*30)
     
-    let formatter = DateFormatter()
-    formatter.dateFormat = "YYYY-MM-dd'T'HH:mm"
+    let formatter = DateFormatter.shortenedISO8601Formatter
     
     self.searchParameters = SearchParameters(
       partner: "skypicker",
@@ -46,49 +38,36 @@ public class FlightOffersViewModel: ObservableObject {
       locale: "en",
       limit: 5,
       maxStopOvers: 0,
-      returnDepartureBefore: formatter.string(from: returnDate2),
-      returnDepartureAfter: formatter.string(from: returnDate),
-      returnFromDifferentAirport: false
+      returnDepartureBefore: formatter.string(from: laterReturnDate),
+      returnDepartureAfter: formatter.string(from: earlierReturnDate),
+      returnFromDifferentAirport: false,
+      minNights: 3,
+      maxNights: 7
     )
   }
-  
-  func fetchOffers() {    
+    
+  func fetchOffers() {
     flightsClient.search(searchParameters)
-      .map { [weak self] (flights: Flights) -> [FlightOffer] in
-        flights.data.map { (flightData: FlightData) -> FlightOffer in
-          let journeyToDestination = flightData.routes
-            .first(where: { route in route.cityFrom == flightData.cityFrom })
-            .map { routeToDestionation in
-              Route(
-                from: routeToDestionation.cityFrom,
-                to: routeToDestionation.cityTo,
-                departure: routeToDestionation.departure,
-                arrival: routeToDestionation.arrival
-              )
-            }
-          
-          let journeyFromDestination = flightData.routes
-            .first(where: { route in route.cityFrom == flightData.cityTo })
-            .map { routeHome in
-              Route(
-                from: routeHome.cityFrom,
-                to: routeHome.cityTo,
-                departure: routeHome.departure,
-                arrival: routeHome.arrival
-              )
-            }
-          
-          return FlightOffer(
-            imageURL: self?.flightsClient.imageURL(flightData),
-            destination: flightData.cityTo,
-            departureFrom: flightData.cityFrom,
-            departureTime: flightData.departure.formatted(.dateTime),
-            arrivalTime: flightData.arrival.formatted(.dateTime),
-            price: flightData.price.formatted(.currency(code: flights.currency)),
-            adults: flights.numOfAdults,
-            nightsInDestination: flightData.nightsInDestination,
-            journeyToDestionation: journeyToDestination!,
-            journeyFromDestination: journeyFromDestination!
+      .map { [weak self] externalArray in
+        externalArray.map { externalOffer in
+          FlightOffers.FlightOffer(
+            imageURL: self?.flightsClient.imageURL(cityTo: externalOffer.cityTo, countryToCode: externalOffer.countryToCode),
+            destination: externalOffer.cityTo,
+            price: externalOffer.price.formatted(.currency(code: externalOffer.currency)),
+            adults: externalOffer.adults,
+            nightsInDestination: externalOffer.nightsInDestination,
+            journeyToDestionation: Route(
+              from: externalOffer.journeyToDestionation.from,
+              to: externalOffer.journeyToDestionation.to,
+              departure: externalOffer.journeyToDestionation.departure,
+              arrival: externalOffer.journeyToDestionation.arrival
+            ),
+            journeyFromDestination: Route(
+              from: externalOffer.journeyFromDestination.from,
+              to: externalOffer.journeyFromDestination.to,
+              departure: externalOffer.journeyFromDestination.departure,
+              arrival: externalOffer.journeyFromDestination.arrival
+            )
           )
         }
       }

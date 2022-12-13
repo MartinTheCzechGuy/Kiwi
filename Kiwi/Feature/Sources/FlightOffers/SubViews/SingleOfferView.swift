@@ -2,21 +2,15 @@ import CoreToolkit
 import UIToolkit
 import SwiftUI
 
-struct SingleOfferView: View {
-  
+struct SingleOfferView: View {  
   private let offer: FlightOffer
-  private let onButtonTap: () -> Void
   
-  init(
-    offer: FlightOffer,
-    onButtonTap: @escaping () -> Void
-  ) {
+  init(offer: FlightOffer) {
     self.offer = offer
-    self.onButtonTap = onButtonTap
   }
   
   var body: some View {
-    VStack(spacing: 50) {
+    VStack(spacing: 30) {
       AsyncImage(
         url: offer.imageURL,
         content: { loadedImage in
@@ -27,45 +21,41 @@ struct SingleOfferView: View {
         },
         placeholder: {
           Rectangle()
-            .frame(width: 200, height: 200)
+            .fill(Color.gray)
             .redacted(reason: .placeholder)
         }
       )
+      .frame(maxHeight: UIScreen.main.bounds.height / 4)
       
-      VStack(spacing: 30) {
-        VStack(spacing: 15) {
-          Text("Enjoy \(offer.nightsInDestination) \(offer.nightsInDestination > 1 ? "nights" : "night") in \(offer.destination)")
-            .font(.title2)
-            .fontWeight(.black)
-          
-          HStack {
-            Text(offer.journeyToDestionation.departure, format: .date)
-            Text("-")
-            Text(offer.journeyFromDestination.departure, format: .date)
-          }
-          
-          Text("Only \(offer.price) for \(offer.adults) adults")
-        }
-        .font(.body)
+      VStack(spacing: 15) {
+        Text("Enjoy \(offer.nightsInDestination) \(offer.nightsInDestination > 1 ? "nights" : "night") in \(offer.destination)")
+          .font(.title2)
+          .fontWeight(.black)
         
-        VStack(alignment: .leading, spacing: 15) {
-          Text("Journey to destination")
-            .fontWeight(.black)
-          Text("\(offer.journeyToDestionation.from) -> \(offer.journeyToDestionation.to)")
-          Text(offer.journeyToDestionation.departure, format: .dateTime)
-          
-          
-          Text("Return journey")
-            .fontWeight(.black)
-          Text("\(offer.journeyFromDestination.from) -> \(offer.journeyFromDestination.to)")
-          Text(offer.journeyFromDestination.departure, format: .dateTime)
+        HStack {
+          Text(offer.journeyToDestionation.departure, format: .date)
+          Text("-")
+          Text(offer.journeyFromDestination.departure, format: .date)
         }
-        .font(.callout)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        
+        Text("Only \(offer.price) for \(offer.adults) adults")
       }
+      .font(.body)
       
-      Button("Book now", action: onButtonTap)
-        .primaryButton()
+      VStack(alignment: .leading, spacing: 15) {
+        Text("Journey to destination")
+          .fontWeight(.black)
+        Text("\(offer.journeyToDestionation.from) -> \(offer.journeyToDestionation.to)")
+        Text(offer.journeyToDestionation.departure, format: .dateTime)
+        
+        
+        Text("Return journey")
+          .fontWeight(.black)
+        Text("\(offer.journeyFromDestination.from) -> \(offer.journeyFromDestination.to)")
+        Text(offer.journeyFromDestination.departure, format: .dateTime)
+      }
+      .font(.callout)
+      .frame(maxWidth: .infinity, alignment: .leading)
       
       Spacer()
     }
@@ -80,9 +70,6 @@ struct SingleOfferView_Previews: PreviewProvider {
         FlightOffer(
           imageURL: URL(string: "https://images.kiwi.com/photos/600x330/prague_cz.jpg"),
           destination: "Prague",
-          departureFrom: "Brno",
-          departureTime: "2023-03-07 11:55 AM",
-          arrivalTime: "2023-03-12 2:45 PM",
           price: "€200",
           adults: 2,
           nightsInDestination: 5,
@@ -98,9 +85,7 @@ struct SingleOfferView_Previews: PreviewProvider {
             departure: .now,
             arrival: .now
           )
-          
-        ),
-      onButtonTap: {}
+        )
     )
     .padding()
   }

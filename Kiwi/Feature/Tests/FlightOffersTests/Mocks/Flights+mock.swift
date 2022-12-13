@@ -1,13 +1,13 @@
 import Foundation
-import FlightsSDK
+@testable import FlightsSDK
 
-extension Flights {
-  static var mock: Flights {
-    Flights(
+extension FlightsEntity {
+  static var mock: FlightsEntity {
+    FlightsEntity(
       currency: "EUR",
       numOfAdults: 2,
       data: [
-        FlightData(
+        FlightDataEntity(
           cityFrom: "Prague",
           cityTo: "Barcelona",
           countryFromCode: "CZ",
@@ -17,13 +17,13 @@ extension Flights {
           price: 200,
           nightsInDestination: 5,
           routes: [
-            Route(
+            RouteEntity(
               cityFrom: "Prague",
               cityTo: "Barcelona",
               departure: Date(timeIntervalSince1970: 1669895252),
               arrival: Date(timeIntervalSince1970: 1669906052)
             ),
-            Route(
+            RouteEntity(
               cityFrom: "Barcelona",
               cityTo: "Prague",
               departure: Date(timeIntervalSince1970: 1670748452),

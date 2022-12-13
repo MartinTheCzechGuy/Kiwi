@@ -8,7 +8,7 @@ final class FlightsClientTests: XCTestCase {
   private var bag = Set<AnyCancellable>()
   
   func test_fetch_flights() {
-    let response = Flights.json.data(using: .utf8)!
+    let response = FlightsEntity.json.data(using: .utf8)!
     
     let networkingClient = NetworkingClientMock(
       response: Just(response)

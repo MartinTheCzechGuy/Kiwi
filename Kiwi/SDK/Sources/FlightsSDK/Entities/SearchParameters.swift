@@ -18,6 +18,8 @@ public struct SearchParameters: Encodable {
   let returnDepartureBefore: String
   let returnDepartureAfter: String
   let returnFromDifferentAirport: Bool
+  let minNights: Int
+  let maxNights: Int
   
   enum CodingKeys: String, CodingKey {
     case partner
@@ -35,6 +37,8 @@ public struct SearchParameters: Encodable {
     case returnDepartureBefore = "rt_depart_before"
     case returnDepartureAfter = "rt_depart_after"
     case returnFromDifferentAirport = "ret_from_diff_airport"
+    case minNights = "nights_in_dst_from"
+    case maxNights = "nights_in_dst_to"
   }
   
   public enum CabinType: String, Encodable {
@@ -59,7 +63,9 @@ public struct SearchParameters: Encodable {
     maxStopOvers: Int,
     returnDepartureBefore: String,
     returnDepartureAfter: String,
-    returnFromDifferentAirport: Bool
+    returnFromDifferentAirport: Bool,
+    minNights: Int,
+    maxNights: Int
   ) {
     self.partner = partner
     self.partnerMarket = partnerMarket
@@ -76,5 +82,7 @@ public struct SearchParameters: Encodable {
     self.returnDepartureBefore = returnDepartureBefore
     self.returnDepartureAfter = returnDepartureAfter
     self.returnFromDifferentAirport = returnFromDifferentAirport
+    self.minNights = minNights
+    self.maxNights = maxNights
   }
 }

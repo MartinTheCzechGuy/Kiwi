@@ -6,41 +6,82 @@ public extension FlightsClient {
     FlightsClient(
       search: { _ in
         Just(
-          Flights(
-            currency: "EUR",
-            numOfAdults: 2,
-            data: [
-              FlightData(
-                cityFrom: "Prague",
-                cityTo: "Barcelona",
-                countryFromCode: "CZ",
-                countryToCode: "ES",
-                departure: Date(timeIntervalSince1970: 1669895252),
-                arrival: Date(timeIntervalSince1970: 1670759252),
-                price: 200,
-                nightsInDestination: 5,
-                routes: [
-                  Route(
-                    cityFrom: "Prague",
-                    cityTo: "Barcelona",
-                    departure: Date(timeIntervalSince1970: 1669895252),
-                    arrival: Date(timeIntervalSince1970: 1669906052)
-                  ),
-                  Route(
-                    cityFrom: "Barcelona",
-                    cityTo: "Prague",
-                    departure: Date(timeIntervalSince1970: 1670748452),
-                    arrival: Date(timeIntervalSince1970: 1670759252)
-                  )
-                ]
+          [
+            FlightOffer(
+              cityTo: "Prague",
+              countryToCode: "CZ",
+              cityFrom: "Brno",
+              departureTime: Date(timeIntervalSince1970: 1678176300),
+              arrivalTime: Date(timeIntervalSince1970: 1678867500),
+              price: 200,
+              currency: "EUR",
+              adults: 2,
+              nightsInDestination: 5,
+              journeyToDestionation: Route(
+                from: "Brno",
+                to: "Prague",
+                departure: .now,
+                arrival: .now
+              ),
+              journeyFromDestination: Route(
+                from: "Prague",
+                to: "Brno",
+                departure: .now,
+                arrival: .now
               )
-            ]
-          )
+            ),
+            FlightOffer(
+              cityTo: "Prague",
+              countryToCode: "CZ",
+              cityFrom: "Brno",
+              departureTime: Date(timeIntervalSince1970: 1678176300),
+              arrivalTime: Date(timeIntervalSince1970: 1678867500),
+              price: 200,
+              currency: "EUR",
+              adults: 2,
+              nightsInDestination: 5,
+              journeyToDestionation: Route(
+                from: "Brno",
+                to: "Prague",
+                departure: .now,
+                arrival: .now
+              ),
+              journeyFromDestination: Route(
+                from: "Prague",
+                to: "Brno",
+                departure: .now,
+                arrival: .now
+              )
+            ),
+            FlightOffer(
+              cityTo: "Prague",
+              countryToCode: "CZ",
+              cityFrom: "Brno",
+              departureTime: Date(timeIntervalSince1970: 1678176300),
+              arrivalTime: Date(timeIntervalSince1970: 1678867500),
+              price: 200,
+              currency: "EUR",
+              adults: 2,
+              nightsInDestination: 5,
+              journeyToDestionation: Route(
+                from: "Brno",
+                to: "Prague",
+                departure: .now,
+                arrival: .now
+              ),
+              journeyFromDestination: Route(
+                from: "Prague",
+                to: "Brno",
+                departure: .now,
+                arrival: .now
+              )
+            )
+          ]
         )
         .setFailureType(to: FlightsError.self)
         .eraseToAnyPublisher()
       },
-      imageURL: { _ in
+      imageURL: { _, _ in
         URL(string: "https://images.kiwi.com/photos/600x330/prague_cz.jpg")!
       }
     )

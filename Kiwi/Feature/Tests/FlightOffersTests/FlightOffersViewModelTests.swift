@@ -19,13 +19,12 @@ final class FlightOffersViewModelTests: XCTestCase {
     
     let expectation1 = expectation(description: "Should receive loading")
     let expectation2 = expectation(description: "Should receive failed")
-    
+        
     sut.$offers
       // drop the initial value
       .dropFirst(1)
       .sink(
         receiveValue: { loadingState in
-          print("received \(loadingState)")
           switch loadingState {
           case .loading:
             expectation1.fulfill()

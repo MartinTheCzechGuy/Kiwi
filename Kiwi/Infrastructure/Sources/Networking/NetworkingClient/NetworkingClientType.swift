@@ -18,6 +18,14 @@ public extension NetworkingClientType {
       }
       .eraseToAnyPublisher()
   }
+  
+  func request<T: Decodable>(
+    _ urlRequest: URLRequest,
+    jsonDecoder: JSONDecoder = JSONDecoder(),
+    ofResponseType: T.Type
+  ) -> AnyPublisher<T, NetworkError> {
+    request(urlRequest, jsonDecoder: jsonDecoder)
+  }
 }
 
 
