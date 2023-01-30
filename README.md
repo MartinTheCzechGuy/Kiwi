@@ -1,6 +1,6 @@
 # Kiwi
 
-Simple flight search App.
+MVVM playgounr app. Simple flight search App.
 
 ![kiwi](https://user-images.githubusercontent.com/43984788/207322887-92462f32-d58e-4046-b0e2-2cf113a2f0b1.gif)
 
